@@ -1,0 +1,33 @@
+[
+  {
+    "productId": "asdf-234-fsdf-23-sdf",
+    "barcode":"412341234235123512",
+    "name": "Arroz miraflores 1kg",
+    "img": "https://images.lider.cl/wmtcl?source=url[file:/productos/2405a.jpg]&scale=size[2000x2000]&sink",
+    "costPrice": 1100,
+    "salePrice": 1500,
+    "wholeSalePrice": 1300,
+    "category": "abarrotes"
+  },
+  {
+    "productId": "asdf-234-fsdf-23-sdasdff",
+    "barcode":"3232323232323",
+    "name": "Aceite De Maravilla, 900 ml",
+    "img": "https://images.lider.cl/wmtcl?source=url[file:/productos/468939a.jpg]&scale=size[2000x2000]&sink",
+    "costPrice": 1800,
+    "salePrice": 2200,
+    "wholeSalePrice": 2000,
+    "category": "abarrotes" 
+  },
+  {
+    "productId": "asdf-234-fsdf-23-6789olkiol",
+    "barcode":"098765432123456",
+    "name": "Protector Solar Pantalla SPF 50, 750 ml",
+    "img": "https://images.lider.cl/wmtcl?source=url[file:/productos/675980a.jpg]&scale=size[2000x2000]&sink",
+    "costPrice": 13500,
+    "salePrice": 14290,
+    "wholeSalePrice": 14290,
+    "category": "limpieza"
+  }
+
+]

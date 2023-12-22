@@ -1,0 +1,40 @@
+GET http://localhost:1234/products
+
+### recuperar producto por id
+GET http://localhost:1234/products/asdf-234-fsdf-23-sdf
+
+### Filtrar por categoria
+GET http://localhost:1234/products?category=abarrotes
+
+### Crear un nuevo producto
+
+POST http://localhost:1234/products
+Content-Type: application/json
+
+ {
+    "barcode": "1234",
+    "name": "Aceite miraflores",
+    "costPrice": 1800,
+    "salePrice": 2450,
+    "wholeSalePrice": 2100,
+    "category": "abarrotes"
+  }
+###
+
+POST http://localhost:1234/products
+Content-Type: application/json
+{
+  "name": "Aceite miraflores",
+  "costPrice": 1800,
+  "salePrice": 2450,
+  "wholeSalePrice": 2100,
+  "category": "abarrotes"
+}
+
+### actualizar un producto
+PATCH http://localhost:1234/products/asdf-234-fsdf-23-sdf
+Content-Type: application/json
+
+{
+  "costPrice": 0
+}
