@@ -1,4 +1,4 @@
-const z = require('zod') // validaciones de datos
+import z from 'zod'
 
 const productsSchema = z.object({
   barcode: z.number({
@@ -12,15 +12,10 @@ const productsSchema = z.object({
   category: z.string()
 })
 
-function validateProduct (object) {
+export function validateProduct (object) {
   return productsSchema.safeParse(object)
 }
 
-function validatePartialProduct (input) {
+export function validatePartialProduct (input) {
   return productsSchema.partial().safeParse(input)
-}
-
-module.exports = {
-  validateProduct,
-  validatePartialProduct
 }
