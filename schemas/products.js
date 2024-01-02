@@ -9,7 +9,10 @@ const productsSchema = z.object({
   costPrice: z.number().int().min(0).default(0),
   salePrice: z.number().int().min(0),
   wholeSalePrice: z.number().int().min(0).optional(),
-  category: z.string()
+  category: z.string().optional(),
+  stock: z.number().int().min(0).nullish(),
+  alertStock: z.number().int().min(0).nullish(),
+  profit: z.number().int().min(0).nullish()
 })
 
 export function validateProduct (object) {

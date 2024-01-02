@@ -1,10 +1,10 @@
 GET http://localhost:1234/products
 
 ### recuperar producto por id
-GET http://localhost:1234/products/asdf-234-fsdf-23-sdf
+GET http://localhost:1234/products/4
 
 ### Filtrar por categoria
-GET http://localhost:1234/products?category=abarrotes
+GET http://localhost:1234/products?category=Bebidas+Alcoholicas
 
 ### Crear un nuevo producto
 
@@ -12,29 +12,38 @@ POST http://localhost:1234/products
 Content-Type: application/json
 
  {
-    "barcode": "1234",
-    "name": "Aceite miraflores",
+    "barcode": 1313,
+    "name": "Aceite miraflores 4",
+    "img": "https:asdfasdf",
     "costPrice": 1800,
     "salePrice": 2450,
     "wholeSalePrice": 2100,
-    "category": "abarrotes"
+    "category": "abarrotes",
+    "inventoryId": "test"
   }
 ###
 
 POST http://localhost:1234/products
 Content-Type: application/json
 {
+  "barcode": 2234234234,
   "name": "Aceite miraflores",
+  "img": "https:asdfasdf",
   "costPrice": 1800,
   "salePrice": 2450,
   "wholeSalePrice": 2100,
   "category": "abarrotes"
 }
 
+### Eliminar un producto
+DELETE http://localhost:1234/products/4
+
 ### actualizar un producto
-PATCH http://localhost:1234/products/asdf-234-fsdf-23-sdf
+PATCH http://localhost:1234/products/2
 Content-Type: application/json
 
 {
-  "costPrice": 0
+  "sql": "SELECT * FROM products",
+  "name": "nuevo nombre 1as32",
+  "costPrice": 10033
 }
