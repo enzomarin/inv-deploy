@@ -2,7 +2,9 @@ import express, { json } from 'express'
 import cors from 'cors'
 import { createProductRouter } from './routes/products.js'
 import { ProductsModel } from './models/mysql/product.js'
+import { AuthModel } from './models/mysql/auth.js'
 import 'dotenv/config'
+import { createAuthRouter } from './routes/auth.js'
 
 const app = express()
 
@@ -20,6 +22,7 @@ app.get('/', (req, res) => {
   res.status(200).send('<h1>Inventario</h1>')
 })
 
+app.use('/auth', createAuthRouter({ authModel: AuthModel }))
 app.use('/products', createProductRouter({ productsModel: ProductsModel }))
 
 // .use para todos los metodos (get, post, etc...)

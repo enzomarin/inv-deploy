@@ -1,0 +1,19 @@
+
+POST http://localhost:1234/auth/register
+Content-Type: application/json
+
+ {
+    "rut": "239623026",
+    "email": "enzomarin12@gmail.com",
+    "password": "1234"
+  }
+
+### Login
+POST http://localhost:1234/auth/login
+Content-Type: application/json
+
+ {
+    "SQL": "SELECT * FROM users;",
+    "em": "ema@gmail.com",
+    "password": "1234"
+  }
