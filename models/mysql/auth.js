@@ -1,22 +1,11 @@
-import mysql from 'mysql2/promise'
 import 'dotenv/config'
 
-const DEFAULT_CONFIG = {
-  host: 'localhost',
-  user: 'root',
-  port: 3306,
-  password: '',
-  database: 'inventorydb'
-}
-// const connectionString = process.env.DATABASE_URL ?? DEFAULT_CONFIG
-const connectionString = DEFAULT_CONFIG
-console.log(connectionString)
-const connection = await mysql.createConnection(connectionString)
+import { connectionDb } from '../../utils/mySqlConnection.js'
 
 export class AuthModel {
   static async register ({ rut, email, passwordHash }) {
     try {
-      const result = await connection.query('INSERT INTO users(rut, email, password) VALUES (?,?,?);', [rut, email, passwordHash])
+      const result = await connectionDb.query('INSERT INTO users(rut, email, password) VALUES (?,?,?);', [rut, email, passwordHash])
       return result
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
@@ -29,7 +18,7 @@ export class AuthModel {
   }
 
   static async findUser ({ email }) {
-    const [user] = await connection.query('SELECT * FROM users WHERE email = ?;', [email])
+    const [user] = await connectionDb.query('SELECT * FROM users WHERE email = ?;', [email])
     return user[0]
   }
 }

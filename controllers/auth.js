@@ -17,7 +17,6 @@ export class AuthController {
     if (user) {
       const { id, rut, email, password: passwordHash } = user
       const checkPassword = await compare(password, passwordHash) // <- Return true or false
-      console.log(checkPassword)
       if (checkPassword) {
         const userToken = {
           id,

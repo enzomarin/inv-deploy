@@ -14,6 +14,6 @@ Content-Type: application/json
 
  {
     "SQL": "SELECT * FROM users;",
-    "em": "ema@gmail.com",
+    "email": "ema@gmail.com",
     "password": "1234"
   }
