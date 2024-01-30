@@ -54,8 +54,8 @@ export class ProductController {
 
     const { id } = req.params
     const updatedProduct = await this.productsModel.update({ id, input: result.data })
-    if (updatedProduct) res.json(updatedProduct)
+    if (updatedProduct) return res.status(201).json(updatedProduct)
 
-    res.json({ message: 'Product not found' })
+    return res.status(400).json({ message: 'Product not found' })
   }
 }

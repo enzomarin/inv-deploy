@@ -1,10 +1,12 @@
 import express, { json } from 'express'
 import cors from 'cors'
 import { createProductRouter } from './routes/products.js'
+import { createShopRouter } from './routes/shops.js'
 import { ProductsModel } from './models/mysql/product.js'
 import { AuthModel } from './models/mysql/auth.js'
 import 'dotenv/config'
 import { createAuthRouter } from './routes/auth.js'
+import { ShopModel } from './models/mysql/shop.js'
 
 const app = express()
 
@@ -13,7 +15,7 @@ const PORT = process.env.PORT ?? 1234
 app.use(json()) // middleware para mutar req.body
 app.use(cors())
 app.use((req, res, next) => {
-  // revisar si el usuario está logeado
+  // TODO: revisar si el usuario está logeado
   console.log('midleware')
   next()
 })
@@ -24,6 +26,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', createAuthRouter({ authModel: AuthModel }))
 app.use('/products', createProductRouter({ productsModel: ProductsModel }))
+app.use('/shop', createShopRouter({ shopModel: ShopModel }))
 
 // .use para todos los metodos (get, post, etc...)
 app.use((req, res) => {
