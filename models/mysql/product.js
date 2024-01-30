@@ -22,7 +22,7 @@ export class ProductsModel {
   }
 
   static async getById ({ id }) {
-    const [product] = await connectionDb.query('SELECT productId, barcode, products.name,salePrice, categories.name as category FROM products JOIN categories ON products.category = categories.catId WHERE productId= ?;', [id])
+    const [product] = await connectionDb.query('SELECT id, barcode, products.name,salePrice, categories.name as category FROM products JOIN categories ON products.categoryId = categories.catId WHERE productId= ?;', [id])
 
     if (product.length === 0) return null
 
@@ -37,23 +37,27 @@ export class ProductsModel {
       costPrice,
       salePrice,
       wholeSalePrice,
+      profit,
       category,
       stock,
-      alertStock,
-      profit
-    } = input
+      alertStock
 
+    } = input
+    console.log(input)
     const [cat] = await connectionDb.query('SELECT * FROM categories WHERE name = ?;', [category])
     const [{ catId }] = cat
+    console.log('catID: ', catId)
     try {
-      const result = await connectionDb.query('INSERT INTO products(barcode, name, img, costPrice, salePrice, wholesalePrice, category) VALUES ( ?, ?, ?, ?, ?, ?, ?);', [barcode, name, img, costPrice, salePrice, wholeSalePrice, catId])
+      const resultProduct = await connectionDb.query('INSERT INTO products(barcode, name, img, costPrice, salePrice, wholesalePrice, profit, categoryId) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?);', [barcode, name, img, costPrice, salePrice, wholeSalePrice, profit, catId ?? 0])
+      const [{ insertId }] = resultProduct
+      console.log('HOLAAAAAAA')
+      await connectionDb.query('INSERT INTO product_prices_history(productId, costPrice, salePrice) VALUES (?,?,?)', [insertId, costPrice, salePrice])
 
-      const [{ insertId }] = result
-      const [products] = await connectionDb.query('SELECT productId, barcode, products.name,salePrice, categories.name as category FROM products JOIN categories ON products.category = categories.catId WHERE productId= ?;', [insertId])
+      const [products] = await connectionDb.query('SELECT id, barcode, products.name,salePrice, categories.name as category FROM products JOIN categories ON products.categoryId = categories.catId WHERE id= ?;', [insertId])
 
       return products[0]
     } catch (err) {
-      throw new Error('error al crear el producto')
+      throw new Error(err)
     }
   }
 
@@ -65,8 +69,15 @@ export class ProductsModel {
   }
 
   static async update ({ id, input }) {
-    await connectionDb.query('UPDATE products SET ? WHERE productId = ?;', [input, id])
-    const [products] = await connectionDb.query('SELECT * FROM products WHERE productId = ?;', [id])
+    const { costPrice, salePrice } = input
+    const result = await connectionDb.query('UPDATE products SET ? WHERE id = ?;', [input, id])
+    const [{ affectedRows }] = result
+    if (affectedRows > 0) {
+      if (costPrice && salePrice) {
+        await connectionDb.query('INSERT INTO product_prices_history(productId, costPrice, salePrice) VALUES (?,?,?)', [id, costPrice, salePrice])
+      }
+    }
+    const [products] = await connectionDb.query('SELECT * FROM products WHERE id = ?;', [id])
     return products[0]
   }
 }

@@ -25,13 +25,15 @@ Content-Type: application/json
 
 POST http://localhost:1234/products
 Content-Type: application/json
+
 {
-  "barcode": 2234234234,
-  "name": "Aceite miraflores",
-  "img": "https:asdfasdf",
-  "costPrice": 1800,
-  "salePrice": 2450,
-  "wholeSalePrice": 2100,
+  "barcode": 11111111111,
+  "name": "Azucar esmeralda",
+  "img": "https:azucarISANsa.com",
+  "costPrice": 890,
+  "salePrice": 1290,
+  "wholeSalePrice": 1000,
+  "profit": 30,
   "category": "abarrotes"
 }
 
@@ -39,11 +41,11 @@ Content-Type: application/json
 DELETE http://localhost:1234/products/4
 
 ### actualizar un producto
-PATCH http://localhost:1234/products/2
+PATCH http://localhost:1234/products/1
 Content-Type: application/json
 
 {
   "sql": "SELECT * FROM products",
-  "name": "nuevo nombre 1as32",
-  "costPrice": 10033
+  "costPrice": 2300,
+  "salePrice": 3190
 }

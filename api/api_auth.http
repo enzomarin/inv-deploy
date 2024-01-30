@@ -5,7 +5,8 @@ Content-Type: application/json
  {
     "rut": "239623026",
     "email": "enzomarin12@gmail.com",
-    "password": "1234"
+    "password": "1234",
+    "subscriptionEndDate": "12/12/2024"
   }
 
 ### Login
@@ -14,6 +15,19 @@ Content-Type: application/json
 
  {
     "SQL": "SELECT * FROM users;",
-    "email": "ema@gmail.com",
+    "email": "enzomarin12@gmail.com",
     "password": "1234"
+  }
+
+
+
+###
+POST http://localhost:1234/shop/
+Content-Type: application/json
+
+ {
+    "name": "Nuevo Amanecer;",
+    "address": "Anibal pinto 27, purranque, los lagos",
+    "userid": "2baec9ea-aabd-11ee-a2bf-7ca3bfd3e3f8",
+    "sql": "SELECT * FROM users"
   }

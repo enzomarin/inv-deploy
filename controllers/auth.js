@@ -15,13 +15,16 @@ export class AuthController {
     const { email, password } = result.data
     const user = await this.authModel.findUser({ email })
     if (user) {
-      const { id, rut, email, password: passwordHash } = user
+      const { id, rut, email, password: passwordHash, rol, subscriptionStatus, subscriptionEndDate } = user
       const checkPassword = await compare(password, passwordHash) // <- Return true or false
       if (checkPassword) {
         const userToken = {
           id,
           rut,
-          email
+          email,
+          rol,
+          subscriptionStatus,
+          subscriptionEndDate
         }
         const token = jwt.sign(userToken, process.env.SECRET)
 
@@ -41,10 +44,10 @@ export class AuthController {
 
     if (result.error) return res.status(400).json({ error: JSON.parse(result.error.message) })
 
-    const { rut, email, password } = result.data
+    const { rut, email, password, rol, subscriptionStatus, subscriptionEndDate } = result.data
     const passwordHash = await encrypt(password)
     try {
-      const user = await this.authModel.register({ rut, email, passwordHash })
+      const user = await this.authModel.register({ rut, email, passwordHash, rol, subscriptionStatus, subscriptionEndDate })
 
       if (user) return res.status(201).json({ message: 'registered user' })
     } catch (error) {

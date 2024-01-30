@@ -3,9 +3,9 @@ import 'dotenv/config'
 import { connectionDb } from '../../utils/mySqlConnection.js'
 
 export class AuthModel {
-  static async register ({ rut, email, passwordHash }) {
+  static async register ({ rut, email, passwordHash, rol, subscriptionStatus, subscriptionEndDate }) {
     try {
-      const result = await connectionDb.query('INSERT INTO users(rut, email, password) VALUES (?,?,?);', [rut, email, passwordHash])
+      const result = await connectionDb.query('INSERT INTO users(rut, email, password, rol, subscriptionStatus,  subscriptionEndDate) VALUES (?,?,?,?,?,?);', [rut, email, passwordHash, rol, subscriptionStatus, subscriptionEndDate])
       return result
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
