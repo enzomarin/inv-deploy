@@ -10,6 +10,7 @@ const productsSchema = z.object({
   salePrice: z.number().int().min(0),
   wholeSalePrice: z.number().int().min(0).optional(),
   profit: z.number().int().min(0).nullish(),
+  trackInventory: z.boolean().default(true),
   category: z.string().optional(),
   stock: z.number().int().min(0).nullish(),
   alertStock: z.number().int().min(0).nullish()

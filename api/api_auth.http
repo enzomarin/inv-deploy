@@ -22,12 +22,13 @@ Content-Type: application/json
 
 
 ###
-POST http://localhost:1234/shop/
+POST http://localhost:1234/business/
 Content-Type: application/json
 
  {
-    "name": "Nuevo Amanecer;",
+    "rut": "23962302-5",
+    "name": "Nuevo Amanecer 2;",
     "address": "Anibal pinto 27, purranque, los lagos",
-    "userid": "2baec9ea-aabd-11ee-a2bf-7ca3bfd3e3f8",
+    "userid": "4c3b7ed2-c184-11ee-a148-afb167f07ea4",
     "sql": "SELECT * FROM users"
   }

@@ -1,12 +1,14 @@
 import express, { json } from 'express'
 import cors from 'cors'
 import { createProductRouter } from './routes/products.js'
-import { createShopRouter } from './routes/shops.js'
+import { createBusinessRouter } from './routes/business.js'
+import { createAuthRouter } from './routes/auth.js'
+import { createInventoryRouter } from './routes/inventory.js'
 import { ProductsModel } from './models/mysql/product.js'
 import { AuthModel } from './models/mysql/auth.js'
+import { InventoryModel } from './models/mysql/inventory.js'
 import 'dotenv/config'
-import { createAuthRouter } from './routes/auth.js'
-import { ShopModel } from './models/mysql/shop.js'
+import { BusinessModel } from './models/mysql/business.js'
 
 const app = express()
 
@@ -26,7 +28,8 @@ app.get('/', (req, res) => {
 
 app.use('/auth', createAuthRouter({ authModel: AuthModel }))
 app.use('/products', createProductRouter({ productsModel: ProductsModel }))
-app.use('/shop', createShopRouter({ shopModel: ShopModel }))
+app.use('/business', createBusinessRouter({ businessModel: BusinessModel }))
+app.use('/inventory', createInventoryRouter({ inventoryModel: InventoryModel }))
 
 // .use para todos los metodos (get, post, etc...)
 app.use((req, res) => {

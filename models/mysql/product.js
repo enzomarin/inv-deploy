@@ -43,14 +43,12 @@ export class ProductsModel {
       alertStock
 
     } = input
-    console.log(input)
     const [cat] = await connectionDb.query('SELECT * FROM categories WHERE name = ?;', [category])
     const [{ catId }] = cat
     console.log('catID: ', catId)
     try {
       const resultProduct = await connectionDb.query('INSERT INTO products(barcode, name, img, costPrice, salePrice, wholesalePrice, profit, categoryId) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?);', [barcode, name, img, costPrice, salePrice, wholeSalePrice, profit, catId ?? 0])
       const [{ insertId }] = resultProduct
-      console.log('HOLAAAAAAA')
       await connectionDb.query('INSERT INTO product_prices_history(productId, costPrice, salePrice) VALUES (?,?,?)', [insertId, costPrice, salePrice])
 
       const [products] = await connectionDb.query('SELECT id, barcode, products.name,salePrice, categories.name as category FROM products JOIN categories ON products.categoryId = categories.catId WHERE id= ?;', [insertId])
