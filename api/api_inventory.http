@@ -16,8 +16,10 @@ Content-Type: application/json
 }
 
 ### Obtener todos los productos por tienda 
-GET http://localhost:1234/inventory/a304eacc-c185-11ee-a148-afb167f07ea4
+GET http://localhost:1234/inventory/products/a304eacc-c185-11ee-a148-afb167f07ea4
 
 ### Obtener todos los productos por categoria
-GET http://localhost:1234/inventory/a304eacc-c185-11ee-a148-afb167f07ea4?category=abarrotes
+GET http://localhost:1234/inventory/products/a304eacc-c185-11ee-a148-afb167f07ea4?category=abarrotes
 
+### Obtener un producto por barcode
+GET http://localhost:1234/inventory/product/a304eacc-c185-11ee-a148-afb167f07ea4?barcode=1290902391

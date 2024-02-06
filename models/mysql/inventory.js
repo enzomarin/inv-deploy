@@ -22,7 +22,7 @@ export class InventoryModel {
       const resultProduct = await connectionDb.query('INSERT INTO products(barcode, name, img, costPrice, salePrice, wholesalePrice, profit, trackInventory, categoryId) VALUES (?,?,?,?,?,?,?,?,?)', [barcode, name, img, costPrice, salePrice, wholeSalePrice, profit, trackInventory, catId ?? 0])
       const [{ affectedRows }] = resultProduct
       if (affectedRows > 0) {
-        console.log(businessId)
+        // console.log(businessId)
         const [{ insertId }] = resultProduct
         await connectionDb.query('INSERT INTO product_prices_history (productId, costPrice, salePrice) VALUES (?,?,?)', [insertId, costPrice, salePrice])
         await connectionDb.query('INSERT INTO product_inventory (businessId,productId,stock,alertStock) VALUES (UUID_TO_BIN(?),?,?,?);', [businessId, insertId, stock, alertStock])
@@ -46,15 +46,30 @@ export class InventoryModel {
         if (categories.length === 0) return []
 
         const { catId } = categories[0]
-        console.log(catId)
+        // console.log(catId)
         const [products] = await connectionDb.query('SELECT * FROM products WHERE categoryId = ?', [catId])
 
         return products
       }
-      const [products] = await connectionDb.query('SELECT barcode, products.name, img, costPrice, salePrice, wholesalePrice, profit, c.name AS category, trackInventory, pv.stock, pv.alertStock FROM products JOIN product_inventory AS pv ON products.id = pv.productId JOIN categories AS c ON products.categoryId = c.catId WHERE pv.businessId = UUID_TO_BIN(?) ;', [businessId])
+
+      const [products] = await connectionDb.query('SELECT products.id,barcode, products.name, img, costPrice, salePrice, wholesalePrice, profit, c.name AS category, trackInventory, pv.stock, pv.alertStock FROM products JOIN product_inventory AS pv ON products.id = pv.productId JOIN categories AS c ON products.categoryId = c.catId WHERE pv.businessId = UUID_TO_BIN(?) ;', [businessId])
       return products
     } catch (err) {
       throw new Error(err)
     }
+  }
+
+  static async getProduct ({ barcode }) {
+    console.log(barcode)
+    if (barcode) {
+      const [products] = await connectionDb.query('SELECT * FROM PRODUCTS WHERE barcode = ?', [barcode])
+      if (products.length > 0) return products[0]
+      throw new Error('Producto no encontrado')
+    }
+  }
+
+  static async getProductById ({ id }) {
+    const [product] = await connectionDb.query('SELECT * FROM products WHERE id = ?', [id])
+    return product
   }
 }

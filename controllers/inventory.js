@@ -30,7 +30,31 @@ export class InventoryController {
 
       return res.json(products)
     } catch (err) {
-      res.status(500).json({ message: err.message })
+      res.status(404).json({ message: err.message })
+    }
+  }
+
+  getProduct = async (req, res) => {
+    const { barcode } = req.query
+    console.log(barcode)
+    try {
+      const product = await this.inventoryModel.getProduct({ barcode })
+      return res.json(product)
+    } catch (err) {
+      res.status(404).json({ message: 'No se encontro el producto' })
+    }
+  }
+
+  getProductById = async (req, res) => {
+    const { productId } = req.params
+
+    try {
+      const product = await this.inventoryModel.getProductById({ id: productId })
+      if (product) return res.json(product)
+
+      res.status(404).json({ message: 'Producto no encontrado' })
+    } catch (err) {
+      throw new Error('Algo salio mal al obtener el producto')
     }
   }
 }
