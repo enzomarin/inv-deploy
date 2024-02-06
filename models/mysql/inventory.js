@@ -38,12 +38,23 @@ export class InventoryModel {
     }
   }
 
-  static async getAllProducts ({ businessId }) {
+  static async getAllProducts ({ businessId, category }) {
     try {
+      if (category) {
+        const lowerCaseCategory = category.toLowerCase()
+        const [categories] = await connectionDb.query('SELECT * FROM categories WHERE name = ?', [lowerCaseCategory])
+        if (categories.length === 0) return []
+
+        const { catId } = categories[0]
+        console.log(catId)
+        const [products] = await connectionDb.query('SELECT * FROM products WHERE categoryId = ?', [catId])
+
+        return products
+      }
       const [products] = await connectionDb.query('SELECT barcode, products.name, img, costPrice, salePrice, wholesalePrice, profit, c.name AS category, trackInventory, pv.stock, pv.alertStock FROM products JOIN product_inventory AS pv ON products.id = pv.productId JOIN categories AS c ON products.categoryId = c.catId WHERE pv.businessId = UUID_TO_BIN(?) ;', [businessId])
       return products
     } catch (err) {
-      throw new Error('Business not exist')
+      throw new Error(err)
     }
   }
 }

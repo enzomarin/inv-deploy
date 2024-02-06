@@ -24,8 +24,9 @@ export class InventoryController {
 
   getAllProducts = async (req, res) => {
     const { businessId } = req.params
+    const { category } = req.query
     try {
-      const products = await this.inventoryModel.getAllProducts({ businessId })
+      const products = await this.inventoryModel.getAllProducts({ businessId, category })
 
       return res.json(products)
     } catch (err) {
