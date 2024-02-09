@@ -9,12 +9,14 @@ import { AuthModel } from './models/mysql/auth.js'
 import { InventoryModel } from './models/mysql/inventory.js'
 import 'dotenv/config'
 import { BusinessModel } from './models/mysql/business.js'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
 const PORT = process.env.PORT ?? 1234
 
 app.use(json()) // middleware para mutar req.body
+app.use(cookieParser())
 app.use(cors())
 app.use((req, res, next) => {
   // TODO: revisar si el usuario está logeado

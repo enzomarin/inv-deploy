@@ -26,8 +26,16 @@ export class AuthController {
           subscriptionStatus,
           subscriptionEndDate
         }
-        const token = jwt.sign(userToken, process.env.SECRET)
+        const token = jwt.sign(userToken, process.env.SECRET, { expiresIn: '1d' })
 
+        // send HTTP-ONLY  COOKIE
+        res.cookie('token', token, {
+          path: '/',
+          httpOnly: true,
+          expires: new Date(Date.now() + 1000 * 86400), // 1 dia
+          sameSite: 'none',
+          secure: true
+        })
         return res.status(200).json({
           rut,
           email,
