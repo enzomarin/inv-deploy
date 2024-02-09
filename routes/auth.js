@@ -8,6 +8,7 @@ export const createAuthRouter = ({ authModel }) => {
 
   registerRouter.post('/register', authController.register)
   registerRouter.post('/login', authController.login)
+  registerRouter.get('/logout', authController.logout)
 
   return registerRouter
 }
