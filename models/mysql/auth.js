@@ -21,4 +21,9 @@ export class AuthModel {
     const [user] = await connectionDb.query('SELECT * FROM users WHERE email = ?;', [email])
     return user[0]
   }
+
+  static async findUserByEmail ({ email }) {
+    const [users] = await connectionDb.query('SELECT BIN_TO_UUID(id) as id, rut, email, rol, subscriptionStatus, subscriptionEndDate FROM users WHERE email = ?;', [email])
+    return users[0]
+  }
 }
