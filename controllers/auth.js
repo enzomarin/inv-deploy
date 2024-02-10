@@ -47,19 +47,20 @@ export class AuthController {
     return res.status(401).send({ error: 'Invalid email or password' })
   }
 
-  register = async (req, res) => {
-    const result = validateUser(req.body)
-
-    if (result.error) return res.status(400).json({ error: JSON.parse(result.error.message) })
-
-    const { rut, email, password, rol, subscriptionStatus, subscriptionEndDate } = result.data
-    const passwordHash = await encrypt(password)
+  register = async (req, res, next) => {
     try {
+      const result = validateUser(req.body)
+      if (result.error) return res.status(400).json({ error: JSON.parse(result.error.message) })
+
+      const { rut, email, password, rol, subscriptionStatus, subscriptionEndDate } = result.data
+      const passwordHash = await encrypt(password)
+
       const user = await this.authModel.register({ rut, email, passwordHash, rol, subscriptionStatus, subscriptionEndDate })
 
       if (user) return res.status(201).json({ message: 'registered user' })
     } catch (error) {
-      return res.status(409).json({ message: error.message || 'Already registered user' })
+      res.status(409)
+      next(error)
     }
   }
 

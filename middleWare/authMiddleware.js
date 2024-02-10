@@ -4,7 +4,7 @@ export const protect = async (req, res, next) => {
   try {
     const token = await req.cookies.token
     if (!token) {
-      res.status(401).json({ message: 'Not authorized, please login' }) // eliminar .json cuando se agrege el middleware para manejar errores
+      res.status(401)
       throw new Error('Not authorized, please login')
     }
     // Verificar token
@@ -20,6 +20,6 @@ export const protect = async (req, res, next) => {
     next()
   } catch (err) {
     res.status(401)
-    throw new Error('Not authorized, please login')
+    next(err)
   }
 }

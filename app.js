@@ -10,6 +10,7 @@ import { InventoryModel } from './models/mysql/inventory.js'
 import 'dotenv/config'
 import { BusinessModel } from './models/mysql/business.js'
 import cookieParser from 'cookie-parser'
+import { errorHandler } from './middleWare/errorMiddleware.js'
 
 const app = express()
 
@@ -32,6 +33,9 @@ app.use('/auth', createAuthRouter({ authModel: AuthModel }))
 app.use('/products', createProductRouter({ productsModel: ProductsModel }))
 app.use('/business', createBusinessRouter({ businessModel: BusinessModel }))
 app.use('/inventory', createInventoryRouter({ inventoryModel: InventoryModel }))
+
+// error middleware
+app.use(errorHandler)
 
 // .use para todos los metodos (get, post, etc...)
 app.use((req, res) => {
