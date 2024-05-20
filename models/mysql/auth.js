@@ -6,7 +6,10 @@ export class AuthModel {
   static async register ({ rut, email, passwordHash, rol, subscriptionStatus, subscriptionEndDate }) {
     try {
       const result = await connectionDb.query('INSERT INTO users(rut, email, password, rol, subscriptionStatus,  subscriptionEndDate) VALUES (?,?,?,?,?,?);', [rut, email, passwordHash, rol, subscriptionStatus, subscriptionEndDate])
-      return result
+      if (result) {
+        const newUser = this.findUser({ rut })
+        return newUser
+      }
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         throw new Error('La dirección de correo electronico ya esta en uso.')
@@ -17,13 +20,13 @@ export class AuthModel {
     }
   }
 
-  static async findUser ({ email }) {
-    const [user] = await connectionDb.query('SELECT * FROM users WHERE email = ?;', [email])
+  static async findUser ({ rut }) {
+    const [user] = await connectionDb.query('SELECT * FROM users WHERE rut = ?;', [rut])
     return user[0]
   }
 
   static async findUserByEmail ({ email }) {
-    const [users] = await connectionDb.query('SELECT BIN_TO_UUID(id) as id, rut, email, rol, subscriptionStatus, subscriptionEndDate FROM users WHERE email = ?;', [email])
+    const [users] = await connectionDb.query('SELECT * FROM users WHERE email = ?;', [email])
     return users[0]
   }
 }
