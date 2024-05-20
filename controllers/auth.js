@@ -84,21 +84,14 @@ export class AuthController {
     res.status(200).json({ message: 'Successfully Logged Out' })
   }
 
-  getUser = async (req, res) => {
-    /*
-    const userFromReq = req.user
-    const { email } = req.user
-    console.log('user from request: ', userFromReq)
-    */
-    const user = req.user
-
-    if (user) {
-      const { id, rut, email, rol, subscriptionStatus, subscriptionEndDate } = user
-
-      return res.status(200).json({ id, rut, email, rol, subscriptionStatus, subscriptionEndDate })
-    } else {
-      res.status(400)
-      throw new Error('User not found')
+  getProfile = async (req, res) => {
+    const { token } = req.cookies // obtenemos el token desde las cookies
+    try {
+      const user = jwt.verify(token, process.env.SECRET)
+      const { iat, exp, ...profile } = user // extraemos solo la informacion (profile) del usuario
+      res.status(200).json(profile)
+    } catch (error) {
+      res.status(401).json({ error: 'invalid token' }) // en caso que el token no sea valido
     }
   }
 
