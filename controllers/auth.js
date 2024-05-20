@@ -13,7 +13,7 @@ export class AuthController {
     if (result.error) return res.status(400).json({ error: JSON.parse(result.error.message) })
 
     const { email, password } = result.data
-    const user = await this.authModel.findUser({ email })
+    const user = await this.authModel.findUserByEmail({ email })
     if (user) {
       const { id, rut, email, password: passwordHash, rol, subscriptionStatus, subscriptionEndDate } = user
       const checkPassword = await compare(password, passwordHash) // <- Return true or false
@@ -33,8 +33,8 @@ export class AuthController {
           path: '/',
           httpOnly: true,
           expires: new Date(Date.now() + 1000 * 86400), // 1 dia
-          sameSite: 'none',
-          secure: true
+          sameSite: 'none', // 'none' 'lax'
+          secure: true // Cambia a true en producción con HTTPS
         })
         return res.status(200).json({
           rut,
@@ -53,13 +53,21 @@ export class AuthController {
       if (result.error) return res.status(400).json({ error: JSON.parse(result.error.message) })
 
       const { rut, email, password, rol, subscriptionStatus, subscriptionEndDate } = result.data
+      const userFound = await this.authModel.findUser({ rut })
+      if (userFound) {
+        return res.status(400).json({ error: 'Rut ya se encuentra registrado' })
+      }
+      const emailFound = await this.authModel.findUserByEmail({ email })
+      if (emailFound) return res.status(400).json({ error: 'Email ya se encuentra registrado' })
+
       const passwordHash = await encrypt(password)
+      const newUser = await this.authModel.register({ rut, email, passwordHash, rol, subscriptionStatus, subscriptionEndDate })
+      const { password: _, ...user } = newUser
 
-      const user = await this.authModel.register({ rut, email, passwordHash, rol, subscriptionStatus, subscriptionEndDate })
-
-      if (user) return res.status(201).json({ message: 'registered user' })
+      if (newUser) return res.status(201).json({ user })
     } catch (error) {
       res.status(409)
+      console.log(error)
       next(error)
     }
   }
@@ -91,6 +99,22 @@ export class AuthController {
     } else {
       res.status(400)
       throw new Error('User not found')
+    }
+  }
+
+  updateUser = async (req, res, next) => {
+    try {
+      const result = validateUser(req.body)
+
+      if (result.error) {
+        const { fieldErrors } = result.error.flatten()
+        console.log(JSON.stringify(fieldErrors))
+        throw new Error(JSON.stringify(fieldErrors))
+      }
+      res.send('ok')
+    } catch (err) {
+      res.status(400)
+      next(err)
     }
   }
 }
