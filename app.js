@@ -16,9 +16,18 @@ const app = express()
 
 const PORT = process.env.PORT ?? 1234
 
+// Configuración de CORS
+const corsOptions = {
+  origin: 'http://localhost:3000', // Cambia esto al dominio de tu frontend
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Esto permite el uso de cookies
+  optionsSuccessStatus: 204
+}
+
 app.use(json()) // middleware para mutar req.body
 app.use(cookieParser())
-app.use(cors())
+// app.use(cors())
+app.use(cors(corsOptions))
 app.use((req, res, next) => {
   // TODO: revisar si el usuario está logeado
   console.log('midleware')
